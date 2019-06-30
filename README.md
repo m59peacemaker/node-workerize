@@ -17,18 +17,20 @@ perfHogzilla() // bye-bye perf, you were hogged
 ```js
 const workerize = require('@m59/workerize')
 
-const {
-	functions: { perfHogzilla }, // you can destructure the workerized function references
-	worker,
-	cleanup
-} = await workerize({
-	perfHogzilla: require.resolve('./perfHogzilla')
-})
-
 ;(async () => {
+	const {
+		functions: { perfHogzilla }, // you can destructure the workerized function references
+		worker,
+		cleanup
+	} = await workerize({
+		perfHogzilla: require.resolve('./perfHogzilla')
+	})
+
 	// perfHogzilla is now asynchronous and no longer hogging this process
 	// so... not really hog or zilla. Just perf.
 	await perfHogzilla()
+
+	await cleanup() // destroy the worker when you're done running functions in it
 })
 ```
 
@@ -90,3 +92,17 @@ workerize(
 	}
 )
 ```
+
+#### returns `{ functions, worker, cleanup }`
+
+##### `functions`
+
+An object of workerized functions.
+
+##### `worker`
+
+The [`worker`](https://nodejs.org/api/worker_threads.html) instance the workerized functions run in.
+
+##### `cleanup`
+
+Function that undoes the effects of the call to `workerize`, particularly by destroying the worker.
