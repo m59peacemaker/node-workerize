@@ -34,6 +34,10 @@ const workerize = require('@m59/workerize')
 })
 ```
 
+## caveats
+
+You can only pass arguments to a workerized function that can be passed with [`postMessage`](https://nodejs.org/api/worker_threads.html#worker_threads_port_postmessage_value_transferlist). This limitation should not be obstructive for any usage I'd recommend.
+
 ## errors
 
 Errors that are thrown in the worker are serialized, sent to the parent process, and deserialized back into errors. In most cases, the behavior would be the same as if the function were running directly on the parent and threw the error. If any workerized functions throw custom errors, the custom error constructors will need to be passed in to `workerize` so that it can deserialize them back into errors as they were in the worker.
