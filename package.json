@@ -1,12 +1,28 @@
 {
   "name": "@m59/workerize",
   "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Takes an object of CommonJS module paths that export functions and returns an object of functions that call the module functions in a worker.",
+  "main": "src/index.js",
   "scripts": {
-    "test": "node index.spec.js"
+    "test": "node src/index.spec.js"
   },
-  "keywords": [],
+  "keywords": [
+    "worker",
+    "thread",
+    "thread",
+    "processes",
+    "function",
+    "multi",
+    "multiple",
+    "cores",
+    "async",
+    "perf",
+    "hogzilla"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/m59peacemaker/node-workerize"
+  },
   "author": "Johnny Hauser <johnnyhauser@gmail.com>",
   "license": "CC0-1.0",
   "dependencies": {
