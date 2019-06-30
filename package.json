@@ -1,6 +1,6 @@
 {
   "name": "@m59/workerize",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Takes an object of CommonJS module paths that export functions and returns an object of functions that call the module functions in a worker.",
   "main": "src/index.js",
   "scripts": {
