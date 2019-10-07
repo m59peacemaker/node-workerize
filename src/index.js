@@ -2,10 +2,11 @@ const { Worker } = require('worker_threads')
 const { promisify } = require('util')
 const { ulid } = require('ulid')
 const { deserializeError: deserializeError_notConfigured } = require('@m59/error-cereal')
+const errorCerealPath = require.resolve('@m59/error-cereal')
 
 const workerCode = `
 	const { parentPort, workerData } = require('worker_threads')
-	const { serializeError } = require('@m59/error-cereal')
+	const { serializeError } = require('${errorCerealPath}')
 	parentPort.setMaxListeners(Infinity)
 
 	try {
