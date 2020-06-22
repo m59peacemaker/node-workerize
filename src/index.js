@@ -38,13 +38,18 @@ module.exports = (
 		customErrorConstructors
 	})
 
+	let exited = false
+
 	return new Promise((resolve, reject) => {
 		const functions = Object
 			.entries(modules)
 			.map(([ functionName, modulePath ]) => [
 				functionName,
-				async (...args) =>
-					new Promise((resolve, reject) => {
+				async (...args) => {
+					if (exited) {
+						throw new Error('workerized function was called after worker has exited')
+					}
+					return new Promise((resolve, reject) => {
 						const jobId = ulid()
 						const messageListener = message => {
 							if (message.jobId === jobId) {
@@ -57,6 +62,7 @@ module.exports = (
 						worker.on('message', messageListener)
 						worker.postMessage({ jobId, functionName, args })
 					})
+				}
 			])
 			.reduce((acc, [ k, v ]) => Object.assign(acc, { [k]: v }), {})
 
@@ -66,5 +72,6 @@ module.exports = (
 			? reject(deserializeError(initError))
 			: resolve({ functions, worker })
 		)
+		worker.on('exit', () => exited = true)
 	})
 }

@@ -61,3 +61,15 @@ test('{ customErrorConstructors } option allows handling custom errors from work
 	}
 	await worker.terminate()
 })
+
+test('throws if workerized function is called after worker is terminated', async t => {
+	const { functions: { sampleFn }, worker } = await workerize({
+		sampleFn: require.resolve('../fixtures/sample-fn')
+	})
+	await sampleFn() // sanity-check
+		.catch(t.fail)
+	await worker.terminate()
+	await sampleFn()
+		.then(() => t.fail('should have thrown'))
+		.catch(error => t.ok(error, error))
+})
