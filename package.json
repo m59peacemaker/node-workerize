@@ -30,6 +30,6 @@
     "ulid": "^2.3.0"
   },
   "devDependencies": {
-    "zora": "^3.0.1"
+    "zora": "^4.0.0"
   }
 }
