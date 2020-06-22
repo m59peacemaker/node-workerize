@@ -1,5 +1,4 @@
 const { Worker } = require('worker_threads')
-const { promisify } = require('util')
 const { ulid } = require('ulid')
 const { deserializeError: deserializeError_notConfigured } = require('@m59/error-cereal')
 const errorCerealPath = require.resolve('@m59/error-cereal')
@@ -62,11 +61,10 @@ module.exports = (
 			.reduce((acc, [ k, v ]) => Object.assign(acc, { [k]: v }), {})
 
 		const worker = new Worker(workerCode, { eval: true, workerData: { modules } })
-		const cleanup = promisify(worker.terminate.bind(worker))
 		worker.setMaxListeners(Infinity)
 		worker.once('message', ({ initError }) => initError
 			? reject(deserializeError(initError))
-			: resolve({ functions, worker, cleanup })
+			: resolve({ functions, worker })
 		)
 	})
 }
